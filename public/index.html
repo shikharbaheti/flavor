@@ -1,0 +1,226 @@
+<!-- DESCRIBING HTML AS DOCTYPE -->
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Flavor</title>
+    <meta name="description" content="Project Flavor for Capital One Software Engineering Summit">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel=" stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Local CSS -->
+    <link rel=" stylesheet" href="css/styles.css">
+    <!-- Local JavaScript -->
+    <script type='text/javascript' src="scripts/script.js"></script>
+    <!-- jquery JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
+    <!-- Axious JS -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Work+Sans&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://i.imgur.com/Bo3NmSj.png">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/">
+            <img src="logo.png" width="30" height="30" class="d-inline-block align-top" alt="Logo">
+            <b>Flavor</b>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+            </ul>
+        </div>
+    </nav>
+    <!-- NAVBAR END -->
+
+    <!-- MAIN BODY DIV START -->
+    <div class="container" id="main_body">
+        <center>
+            <img src="logo.png" class="d-inline-block align-top" height="150rem" alt="Logo">
+            <br>
+            <!-- INPUT BAR FOR LOCATION AND FOOD Cuisine -->
+            <form>
+                <div class="form-row">
+                    <div class="input-group col">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="input1">Cuisine</span>
+                        </div>
+                        <input type="text" id="cuisine" class="form-control" placeholder="What would you like to eat?"
+                            aria-label="cuisine" aria-describedby="input1cuisine">
+                    </div>
+                    <div class="input-group col">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="input2">Location</span>
+                        </div>
+                        <input type="text" id="locationOfEater" class="form-control" placeholder="Location"
+                            aria-label="Location" aria-describedby="input2Location">
+                    </div>
+                </div>
+                <!-- INPUT BAR END -->
+                <br>
+            </form>
+            <button type="button" class="btn btn-primary" onclick="businesses()">Search</button>
+        </center>
+        <br>
+
+        <!-- GOOGLE MAP WILL BE DISPLAYED HERE -->
+        <div class="container" id="map">
+        </div>
+
+        <br>
+
+        <!-- BUSINESS SEARCH WILL BE DISPLAYED HERE -->
+        <div class="container">
+            <div class="row" id="output">
+            </div>
+        </div>
+
+        <!-- FOOTER DESCRIPTION -->
+        <br>
+        <footer class="page-footer font-small">
+            <center>
+                Made by <span class="text-muted"><a href="https://shikharbaheti.net/"> Shikhar Baheti</a></span>
+            </center>
+        </footer>
+
+    </div> <!-- MAIN BODY DIV END -->
+
+    <!-- BUSINESS CARD DISPLAY TEMPLATE -->
+    <script id="businessesDisplayTemplate" type="text/x-handlebars-template">
+        <div class="col-xs-12 col-sm-6 col-md-4 mt-1">
+            <div class="card rounded flex align-items-stretch">
+                <div class="card-body text-center">
+                    <p>
+                        <img class="img-fluid rounded" height="42" src="{{image_url}}" alt="card image">
+                    </p>
+                    <b><h4 class="card-title">{{name}}</h4></b>
+                    <p class="card-subtitle">{{mile distance}} <i>mi</i></p>
+                    <p class="card-text">
+                        {{#ratingConvert rating}}{{ rating}}{{/ratingConvert}}
+                        <br>
+                        {{#statusConvert is_closed}}{{is_closed}}{{/statusConvert}} - {{price}}
+                        <br>
+                        <i>{{display_phone}}</i>
+                    </p>
+                   
+                    <div class="row">
+                        <div class="col-md-6">
+                        <button type="button" class="btn btn-info" onclick="mapIt({{json coordinates}}, {{json name}}, {{json location.display_address}})">Map</button>
+                        </div>
+                        <div class="col-md-6">
+                        <a href="{{url}}" target="_blank">
+                        <button type="button" class="btn btn-danger">Yelp</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <!-- BUSINESS END TEMPLATE -->
+
+    <!-- GOOGLE MAPS API -->
+    <script async defer
+        src=" https://maps.googleapis.com/maps/api/js?key=AIzaSyAAaN5HTDP-BkCCQd0DW3sMpL_OPYrv8Wo&callback=initMap">
+        </script>
+
+    <!-- GOOGLE MAPS FUNCTION AND GEOLOCATION -->
+    <script>
+        const capitalOnePos = {
+            lat: 38.926111,
+            lng: -77.2125
+        };
+        const createMap = ({ lat, lng }) => {
+            return new google.maps.Map(document.getElementById('map'), {
+                center: { lat, lng },
+                zoom: 13
+            });
+        };
+        const createMarker = ({ map, position }) => {
+            return new google.maps.Marker({ map, position });
+        };
+        function initMap() {
+            const map = createMap(capitalOnePos);
+            var geocoder = new google.maps.Geocoder;
+            var infowindow = new google.maps.InfoWindow
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    geocodeLatLng(geocoder, map, infowindow, pos);
+                })
+            };
+        };
+        // HTML5 GEOLOCATION
+        function geocodeLatLng(geocoder, map, infowindow, pos) {
+            var latlng = pos;
+            geocoder.geocode({ 'location': latlng }, function (results, status) {
+                if (status === 'OK') {
+                    if (results[0]) {
+                        map.setZoom(11);
+                        var marker = new google.maps.Marker({
+                            position: latlng,
+                            map: map
+                        });
+                        var homeAddress = "<b> You are at: </b> " + results[0].formatted_address;
+                        infowindow.setContent(homeAddress);
+                        infowindow.open(map, marker);
+                        $("#locationOfEater").attr("value", results[0].formatted_address);
+                    } else {
+                        window.alert('No results found');
+                    }
+                } else {
+                    window.alert('Geocoder failed due to: ' + status);
+                }
+            });
+        }
+
+        // Mapping food establishments on the map
+        function mapIt(convertLoc, name, display_address) {
+            var physicalAddress = display_address.join(", ");
+            var pos = {
+                lat: convertLoc.latitude,
+                lng: convertLoc.longitude
+            };
+            const map = createMap(pos);
+            var infowindow = new google.maps.InfoWindow;
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: map
+            });
+            map.setZoom(15);
+            var contentString = "<b><i>" + name + "</b></i> at " + physicalAddress;
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
+            marker.setMap(map);
+            $('html, body').animate({
+                scrollTop: $("#main_body").offset().top
+            }, 1000)
+        }
+    </script>
+
+    <!-- Handlebar JavaScript -->
+    <script async defer type='text/javascript'
+        src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.3/handlebars.js"></script>
+    <!-- POPPER JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <!-- BOOTSTRAP JAVASCRIPT -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

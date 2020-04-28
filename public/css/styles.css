@@ -1,0 +1,64 @@
+.navbar {
+    background-color: #F79E02;
+    color: blue;
+    font-family: 'Roboto', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+  }
+
+.rounded {
+    border-radius:.25rem!important;
+}
+
+body{
+    background-color: #FCE181;
+    font-family: 'Quicksand', sans-serif;
+}
+
+h1 {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.active {
+  font-weight: bold;
+  color: blue;
+}
+
+#card {
+    font-family: 'Open Sans', sans-serif;
+}
+
+#card-title{
+    font-weight: bold!important;
+}
+
+#main_body{
+    margin-top: 5px;
+}
+
+#footer-copyright {
+    background-color: red;
+}
+
+#search {
+    margin-top: 50px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#output {
+    margin-top: 2rem;
+}
+
+.img-fluid {
+    width: 100%;
+    height: 20rem;
+    object-fit: cover;
+    border: darkorange;
+    border-radius: 1rem;
+  }
+
+#map {
+    height: 300px;
+}
