@@ -72,7 +72,6 @@ function businesses() {
 
 // Converting HTML Template using the API data to cards
 function present(data) {
-    console.log(data);
     let x = data["businesses"].length;
     var source = document.getElementById("businessesDisplayTemplate").innerHTML;
     var template = Handlebars.compile(source);
