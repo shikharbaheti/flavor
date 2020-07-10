@@ -1,6 +1,7 @@
 {
   "name": "flavor",
   "version": "1.0.0",
+  "proxy": "https://flavorproject.herokuapp.com/",
   "description": "Capital One Code Summit",
   "main": "index.js",
   "scripts": {
