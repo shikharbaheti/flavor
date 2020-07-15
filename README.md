@@ -3,7 +3,7 @@
 Flavor is an app created for the Capital One Software Engineering Summit 2020. The app utilizes Yelp's Fusion API to search and return businesses based on the location inputs of the user. The app displays the locations of the businesses on a Google Maps API map and uses Geocoding to translate coordinates to text and vice versa.​
 
 ## Website
-The app can be found live at: flavorproject.appspot.com
+The app can be found live at: https://flavorproject.herokuapp.com/
 
 ## Capital One Software Engineering Summit
 
